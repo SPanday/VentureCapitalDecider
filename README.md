@@ -1,4 +1,5 @@
 # VentureCapitalDecider
 ## A Venture Capital Investment decision tool using Bayesian network
 
-Note : Refer to VCDecider for domain introduction, tool details as well as a case study using the tool
+Note : Refer to Report for domain and tool information; 
+       VCDecider for a case study using the tool
