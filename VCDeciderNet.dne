@@ -1,0 +1,539 @@
+// ~->[DNET-1]->~
+
+// File created by GmytrasiewiczP at UIC using Netica 3.27 on Nov 10, 2017 at 01:19:03.
+
+bnet VCDecider {
+AutoCompile = TRUE;
+autoupdate = TRUE;
+whenchanged = 1510298334;
+
+visual V1 {
+	defdispform = BELIEFBARS;
+	nodelabeling = TITLE;
+	NodeMaxNumEntries = 50;
+	nodefont = font {shape= "Arial"; size= 10;};
+	linkfont = font {shape= "Arial"; size= 9;};
+	windowposn = (104, 104, 1258, 549);
+	resolution = 72;
+	magnification = 0.840896;
+	drawingbounds = (10219, 9542);
+	showpagebreaks = FALSE;
+	usegrid = TRUE;
+	gridspace = (6, 6);
+	NodeSet Node {BuiltIn = 1; Color = 0xc0c0c0;};
+	NodeSet Nature {BuiltIn = 1; Color = 0xf8eed2;};
+	NodeSet Deterministic {BuiltIn = 1; Color = 0xd3caa6;};
+	NodeSet Finding {BuiltIn = 1; Color = 0xc8c8c8;};
+	NodeSet Constant {BuiltIn = 1; Color = 0xffffff;};
+	NodeSet ConstantValue {BuiltIn = 1; Color = 0xffffb4;};
+	NodeSet Utility {BuiltIn = 1; Color = 0xffbdbd;};
+	NodeSet Decision {BuiltIn = 1; Color = 0xdee8ff;};
+	NodeSet Documentation {BuiltIn = 1; Color = 0xf0fafa;};
+	NodeSet Title {BuiltIn = 1; Color = 0xffffff;};
+	PrinterSetting A {
+		margins = (1270, 1270, 1270, 1270);
+		landscape = FALSE;
+		magnify = 1;
+		};
+	};
+
+node Payback_Horizon {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Long, Short);
+	parents = ();
+	probs = 
+		// Long         Short        
+		  (0.9,         0.1);
+	whenchanged = 1510297592;
+	belief = (0.9, 0.1);
+	visual V1 {
+		center = (858, 246);
+		height = 8;
+		};
+	};
+
+node VC_Risk_Adj_Return {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (High, Low);
+	parents = (Payback_Horizon);
+	probs = 
+		// High         Low            // Payback_Horizon 
+		 ((0.95,        0.05),         // Long            
+		  (0.25,        0.75));        // Short           ;
+	whenchanged = 1510297594;
+	belief = (0.88, 0.12);
+	visual V1 {
+		center = (858, 342);
+		height = 1;
+		};
+	};
+
+node Invest {
+	kind = DECISION;
+	discrete = TRUE;
+	chance = DETERMIN;
+	states = (Yes, No);
+	parents = ();
+	functable = 
+		   No;
+	whenchanged = 1510285423;
+	belief = (0.5, 0.5);
+	visual V1 {
+		center = (1020, 438);
+		height = 4;
+		};
+	};
+
+node Mgmt_Quality {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (High, Low);
+	parents = ();
+	probs = 
+		// High         Low          
+		  (0.25,        0.75);
+	whenchanged = 1510298333;
+	belief = (0.25, 0.75);
+	visual V1 {
+		center = (588, 306);
+		height = 26;
+		};
+	};
+
+node Potenfor_Prod_Liability {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (true, false);
+	parents = ();
+	probs = 
+		// true         false        
+		  (0.25,        0.75);
+	whenchanged = 1510298019;
+	belief = (0.25, 0.75);
+	visual V1 {
+		center = (129, 528);
+		height = 12;
+		};
+	};
+
+node Technology_Know_How {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (High, Low);
+	parents = (Mgmt_Quality);
+	probs = 
+		// High         Low            // Mgmt_Quality 
+		 ((0.75,        0.25),         // High         
+		  (0.25,        0.75));        // Low          ;
+	whenchanged = 1510290601;
+	belief = (0.375, 0.625);
+	visual V1 {
+		center = (144, 198);
+		height = 24;
+		};
+	};
+
+node Science_Tech_Quality {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (High, Low);
+	parents = ();
+	probs = 
+		// High         Low          
+		  (0.25,        0.75);
+	whenchanged = 1510297833;
+	belief = (0.25, 0.75);
+	visual V1 {
+		center = (240, 276);
+		height = 25;
+		};
+	};
+
+node Product_Quality {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (High, Low);
+	parents = (Technology_Know_How, Science_Tech_Quality);
+	probs = 
+		// High         Low             // Technology_Know_How Science_Tech_Quality 
+		(((0.93,        0.07),          // High                High                 
+		  (0.83,        0.17)),         // High                Low                  
+		 ((0.55,        0.45),          // Low                 High                 
+		  (0.05,        0.95)));        // Low                 Low                  ;
+	whenchanged = 1510297688;
+	belief = (0.43, 0.57);
+	visual V1 {
+		center = (162, 438);
+		height = 11;
+		};
+	};
+
+node Mkt_Know_How {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (High, Low);
+	parents = (Mgmt_Quality);
+	probs = 
+		// High         Low            // Mgmt_Quality 
+		 ((0.75,        0.25),         // High         
+		  (0.01,        0.99));        // Low          ;
+	whenchanged = 1510297703;
+	belief = (0.195, 0.805);
+	visual V1 {
+		center = (342, 186);
+		height = 23;
+		};
+	};
+
+node Product_Strategy {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Apprpriate, Inappropriate);
+	parents = (Mkt_Know_How);
+	probs = 
+		// Apprpriate   Inappropriate   // Mkt_Know_How 
+		 ((0.75,        0.25),         // High         
+		  (0.25,        0.75));        // Low          ;
+	whenchanged = 1510297772;
+	belief = (0.3475, 0.6525);
+	visual V1 {
+		center = (348, 342);
+		height = 10;
+		};
+	};
+
+node Technology_Uncertainty {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (High, Low);
+	parents = ();
+	probs = 
+		// High         Low          
+		  (0.75,        0.25);
+	whenchanged = 1510297842;
+	belief = (0.75, 0.25);
+	visual V1 {
+		center = (330, 528);
+		height = 13;
+		};
+	};
+
+node Risk_Adj_Product_Poten {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (High, Low);
+	parents = (Potenfor_Prod_Liability, Product_Quality, Product_Strategy, Technology_Uncertainty);
+	probs = 
+		//   High         Low               // Potenfor_Prod_Liability Product_Quality Product_Strategy Technology_Uncertainty 
+		(((((0.05,        0.95),            // true                    High            Apprpriate       High                   
+		    (0.05,        0.95)),           // true                    High            Apprpriate       Low                    
+		   ((0.05,        0.95),            // true                    High            Inappropriate    High                   
+		    (0.05,        0.95))),          // true                    High            Inappropriate    Low                    
+		  (((0.05,        0.95),            // true                    Low             Apprpriate       High                   
+		    (0.05,        0.95)),           // true                    Low             Apprpriate       Low                    
+		   ((0.05,        0.95),            // true                    Low             Inappropriate    High                   
+		    (0.05,        0.95)))),         // true                    Low             Inappropriate    Low                    
+		 ((((0.9,         0.1),             // false                   High            Apprpriate       High                   
+		    (0.95,        0.05)),           // false                   High            Apprpriate       Low                    
+		   ((0.25,        0.75),            // false                   High            Inappropriate    High                   
+		    (0.3,         0.7))),           // false                   High            Inappropriate    Low                    
+		  (((0.1,         0.9),             // false                   Low             Apprpriate       High                   
+		    (0.15,        0.85)),           // false                   Low             Apprpriate       Low                    
+		   ((0.05,        0.95),            // false                   Low             Inappropriate    High                   
+		    (0.075,       0.925)))));       // false                   Low             Inappropriate    Low                    ;
+	whenchanged = 1510298334;
+	belief = (0.2129079, 0.7870921);
+	visual V1 {
+		center = (414, 420);
+		height = 9;
+		link 1 {
+			path = ((206, 499), (343, 448));
+			};
+		};
+	};
+
+node Risk_Adj_Market_Poten {
+	kind = NATURE;
+	discrete = TRUE;
+	states = (High, Low);
+	parents = ();
+	whenchanged = 1510286818;
+	belief = (0.5, 0.5);
+	visual V1 {
+		center = (330, 612);
+		height = 14;
+		};
+	};
+
+node Partner_Motivation {
+	kind = NATURE;
+	discrete = TRUE;
+	states = (High, Low);
+	parents = ();
+	whenchanged = 1510286931;
+	belief = (0.5, 0.5);
+	visual V1 {
+		center = (498, 660);
+		height = 22;
+		};
+	};
+
+node Partner_Size_Strength {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (High, Low, None);
+	parents = ();
+	probs = 
+		// High         Low          None         
+		  (0.05,        0.05,        0.9);
+	whenchanged = 1510287108;
+	belief = (0.05, 0.05, 0.9);
+	visual V1 {
+		center = (666, 684);
+		height = 20;
+		};
+	};
+
+node Strong_Partnerships {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (True, False);
+	parents = (Partner_Motivation, Partner_Size_Strength);
+	probs = 
+		// True         False           // Partner_Motivation Partner_Size_Strength 
+		(((0.82,        0.18),          // High               High                  
+		  (0.25,        0.75),          // High               Low                   
+		  (0,           1)),            // High               None                  
+		 ((0.75,        0.25),          // Low                High                  
+		  (0.05,        0.95),          // Low                Low                   
+		  (0,           1)));           // Low                None                  ;
+	whenchanged = 1510287149;
+	belief = (0.04675, 0.95325);
+	visual V1 {
+		center = (660, 546);
+		height = 21;
+		};
+	};
+
+node Likely_Risk_Adj_Return {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (High, Low);
+	parents = (Mgmt_Quality, Risk_Adj_Product_Poten, Risk_Adj_Market_Poten, Strong_Partnerships);
+	probs = 
+		//   High         Low               // Mgmt_Quality Risk_Adj_Product_Poten Risk_Adj_Market_Poten Strong_Partnerships 
+		(((((0.9,         0.1),             // High         High                   High                  True                
+		    (0.9,         0.1)),            // High         High                   High                  False               
+		   ((0.35,        0.65),            // High         High                   Low                   True                
+		    (0.3,         0.7))),           // High         High                   Low                   False               
+		  (((0.45,        0.55),            // High         Low                    High                  True                
+		    (0.4,         0.6)),            // High         Low                    High                  False               
+		   ((0.3,         0.7),             // High         Low                    Low                   True                
+		    (0.25,        0.75)))),         // High         Low                    Low                   False               
+		 ((((0.5,         0.5),             // Low          High                   High                  True                
+		    (0.25,        0.75)),           // Low          High                   High                  False               
+		   ((0.2,         0.8),             // Low          High                   Low                   True                
+		    (0.1,         0.9))),           // Low          High                   Low                   False               
+		  (((0.2,         0.8),             // Low          Low                    High                  True                
+		    (0.1,         0.9)),            // Low          Low                    High                  False               
+		   ((0.1,         0.9),             // Low          Low                    Low                   True                
+		    (0.01,        0.99)))));        // Low          Low                    Low                   False               ;
+	whenchanged = 1510296502;
+	belief = (0.1669316, 0.8330684);
+	visual V1 {
+		center = (660, 438);
+		height = 2;
+		};
+	};
+
+node VC_Resources_ReltoFund {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Sufficient, Insufficient);
+	parents = ();
+	probs = 
+		// Sufficient   Insufficient 
+		  (0.25,        0.75);
+	whenchanged = 1510285684;
+	belief = (0.25, 0.75);
+	visual V1 {
+		center = (858, 690);
+		height = 7;
+		};
+	};
+
+node Need_For_Addn_Funds {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (True, False);
+	parents = (VC_Resources_ReltoFund);
+	probs = 
+		// True         False          // VC_Resources_ReltoFund 
+		 ((0.05,        0.95),         // Sufficient             
+		  (0.95,        0.05));        // Insufficient           ;
+	whenchanged = 1510285816;
+	belief = (0.725, 0.275);
+	visual V1 {
+		center = (858, 606);
+		height = 6;
+		};
+	};
+
+node Dilution_Risk {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (True, False);
+	parents = (Need_For_Addn_Funds);
+	probs = 
+		// True         False          // Need_For_Addn_Funds 
+		 ((0.95,        0.05),         // True                
+		  (0.05,        0.95));        // False               ;
+	whenchanged = 1510296504;
+	belief = (0.7025, 0.2975);
+	visual V1 {
+		center = (858, 528);
+		height = 5;
+		};
+	};
+
+node Utility {
+	kind = UTILITY;
+	discrete = FALSE;
+	measure = RATIO;
+	chance = DETERMIN;
+	parents = (Invest, Likely_Risk_Adj_Return, VC_Risk_Adj_Return, Dilution_Risk);
+	functable = 
+		                    // Invest Likely_Risk_Adj_Return VC_Risk_Adj_Return Dilution_Risk 
+		((((85,              // Yes    High                   High               True          
+		    90),             // Yes    High                   High               False         
+		   (87.5,            // Yes    High                   Low                True          
+		    95)),            // Yes    High                   Low                False         
+		  ((1,               // Yes    Low                    High               True          
+		    1),              // Yes    Low                    High               False         
+		   (10,              // Yes    Low                    Low                True          
+		    15))),           // Yes    Low                    Low                False         
+		 (((15,              // No     High                   High               True          
+		    10),             // No     High                   High               False         
+		   (12.5,            // No     High                   Low                True          
+		    5)),             // No     High                   Low                False         
+		  ((99,              // No     Low                    High               True          
+		    99),             // No     Low                    High               False         
+		   (90,              // No     Low                    Low                True          
+		    85))));          // No     Low                    Low                False         ;
+	whenchanged = 1510296220;
+	visual V1 {
+		center = (858, 438);
+		height = 3;
+		};
+	};
+
+node Personality_Traits {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Appropriate, Inappropriate);
+	parents = (Mgmt_Quality);
+	probs = 
+		// Appropriate  Inappropriate   // Mgmt_Quality 
+		 ((0.55,        0.45),         // High         
+		  (0.45,        0.55));        // Low          ;
+	whenchanged = 1510297787;
+	belief = (0.475, 0.525);
+	visual V1 {
+		center = (588, 102);
+		height = 17;
+		};
+	};
+
+node AcquaintedWith_Mgmt {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (True, False);
+	parents = (Mgmt_Quality);
+	probs = 
+		// True         False          // Mgmt_Quality 
+		 ((0.65,        0.35),         // High         
+		  (0.5,         0.5));         // Low          ;
+	whenchanged = 1510297787;
+	belief = (0.5375, 0.4625);
+	visual V1 {
+		center = (678, 168);
+		height = 16;
+		};
+	};
+
+node Reputation {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (High, Low);
+	parents = (Mgmt_Quality);
+	probs = 
+		// High         Low            // Mgmt_Quality 
+		 ((0.8,         0.2),          // High         
+		  (0.2,         0.8));         // Low          ;
+	whenchanged = 1510297787;
+	belief = (0.35, 0.65);
+	visual V1 {
+		center = (846, 168);
+		height = 15;
+		};
+	};
+
+node Strong_Network {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (True, False);
+	parents = (Mgmt_Quality);
+	probs = 
+		// True         False          // Mgmt_Quality 
+		 ((0.65,        0.35),         // High         
+		  (0.35,        0.65));        // Low          ;
+	whenchanged = 1510297787;
+	belief = (0.425, 0.575);
+	visual V1 {
+		center = (336, 84);
+		height = 18;
+		};
+	};
+
+node Strong_Advisory {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (True, False);
+	parents = (Mgmt_Quality);
+	probs = 
+		// True         False          // Mgmt_Quality 
+		 ((0.65,        0.35),         // High         
+		  (0.35,        0.65));        // Low          ;
+	whenchanged = 1510297787;
+	belief = (0.425, 0.575);
+	visual V1 {
+		center = (492, 42);
+		height = 19;
+		};
+	};
+ElimOrder = (Payback_Horizon, VC_Resources_ReltoFund, Need_For_Addn_Funds, Personality_Traits, AcquaintedWith_Mgmt, Reputation, Strong_Network, Strong_Advisory, Science_Tech_Quality, Technology_Know_How, Mkt_Know_How, Partner_Motivation, Partner_Size_Strength, VC_Risk_Adj_Return, Dilution_Risk, Potenfor_Prod_Liability, Technology_Uncertainty, Product_Quality, Product_Strategy, Mgmt_Quality, Risk_Adj_Product_Poten, Risk_Adj_Market_Poten, Strong_Partnerships, Likely_Risk_Adj_Return, Invest);
+};
